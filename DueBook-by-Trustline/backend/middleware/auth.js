@@ -1,0 +1,4 @@
+const jwt=require('jsonwebtoken');const {User}=require('../models');
+async function auth(req,res,next){try{const h=req.headers.authorization||'';if(!h.startsWith('Bearer '))return res.status(401).json({message:'Please log in to continue.'});const p=jwt.verify(h.slice(7),process.env.JWT_SECRET);const user=await User.findById(p.sub);if(!user||user.status!=='active'||user.tokenVersion!==p.tv)return res.status(401).json({message:'Your session is no longer valid. Please log in again.'});req.user=user;req.businessId=String(user.businessId);next()}catch(e){return res.status(401).json({message:'Invalid or expired session.'})}}
+function allow(...roles){return (req,res,next)=>{if(!req.user||!roles.includes(req.user.role))return res.status(403).json({message:'You do not have permission to perform this action.'});next()}}
+module.exports={auth,allow};

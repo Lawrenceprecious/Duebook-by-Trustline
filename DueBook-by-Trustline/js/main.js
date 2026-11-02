@@ -1,0 +1,1 @@
+document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());document.querySelectorAll('.toggle-password').forEach(btn=>btn.addEventListener('click',()=>{const input=btn.parentElement.querySelector('input');const show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Hide':'Show'}));
